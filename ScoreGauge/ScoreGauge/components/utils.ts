@@ -1,6 +1,6 @@
 export const ZONES = [
   { min: 0,  max: 20,  color: '#C53030', label: 'At Risk'  },
-  { min: 21, max: 75,  color: '#D69E2E', label: 'Average'  },
+  { min: 21, max: 75,  color: '#B7791F', label: 'Average'  },
   { min: 76, max: 100, color: '#276749', label: 'Good'     },
 ] as const;
 
@@ -11,7 +11,9 @@ export function clamp(value: number, min: number, max: number): number {
 }
 
 export function getZone(score: number): Zone {
-  return ZONES.find(z => score >= z.min && score <= z.max) ?? ZONES[0];
+  if (score <= 20) return ZONES[0];  // At Risk: 0–20
+  if (score <= 75) return ZONES[1];  // Average: 21–75
+  return ZONES[2];                    // Good: 76–100
 }
 
 /**
@@ -26,7 +28,8 @@ export function scoreToPoint(
   cy: number,
   r: number
 ): { x: number; y: number } {
-  const angle = Math.PI * (1 - score / 100);
+  const s = clamp(score, 0, 100);
+  const angle = Math.PI * (1 - s / 100);
   return {
     x: cx + r * Math.cos(angle),
     y: cy - r * Math.sin(angle),
@@ -36,6 +39,10 @@ export function scoreToPoint(
 /**
  * Builds an SVG arc path from startScore to endScore along the gauge arc.
  * sweep-flag=0 (counterclockwise in SVG) produces the upward arc through the top.
+ *
+ * WARNING: Do not call with startScore=0 and endScore=100 simultaneously —
+ * a 180° arc is geometrically degenerate and some renderers may draw a straight
+ * line or the wrong semicircle. Split into two calls (e.g. 0→50 and 50→100) instead.
  */
 export function arcPath(
   startScore: number,

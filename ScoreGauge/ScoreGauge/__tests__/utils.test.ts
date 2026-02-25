@@ -25,6 +25,9 @@ describe('getZone', () => {
   it('score 20 → At Risk (boundary)', () => {
     expect(getZone(20).label).toBe('At Risk');
   });
+  it('score 20.5 → Average (fractional boundary)', () => {
+    expect(getZone(20.5).label).toBe('Average');
+  });
   it('score 21 → Average (boundary)', () => {
     expect(getZone(21).label).toBe('Average');
   });
@@ -58,6 +61,11 @@ describe('scoreToPoint', () => {
     const pt = scoreToPoint(50, CX, CY, R);
     expect(pt.x).toBeCloseTo(60, 0);
     expect(pt.y).toBeCloseTo(10, 0);
+  });
+  it('clamps score 150 to rightmost point', () => {
+    const pt = scoreToPoint(150, CX, CY, R);
+    expect(pt.x).toBeCloseTo(105, 0);
+    expect(pt.y).toBeCloseTo(55, 0);
   });
 });
 
