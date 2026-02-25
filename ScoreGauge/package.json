@@ -31,5 +31,18 @@
     "pcf-start": "^1",
     "typescript": "^5.8.3",
     "typescript-eslint": "8.44.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/__tests__/**/*.+(ts|tsx)"
+    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+    "moduleNameMapper": {
+      "\\.(css|less|scss)$": "<rootDir>/__mocks__/fileMock.js"
+    }
   }
 }
