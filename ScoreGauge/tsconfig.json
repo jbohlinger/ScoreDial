@@ -2,7 +2,7 @@
     "extends": "./node_modules/pcf-scripts/tsconfig_base.json",
     "compilerOptions": {
         "typeRoots": ["node_modules/@types"],
-        "types": ["jest", "node"],
+        "types": ["jest", "node", "powerapps-component-framework"],
         "esModuleInterop": true
     }
 }
